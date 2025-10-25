@@ -1,0 +1,6 @@
+# Enable and disable the commands individually.
+EnabledCommands:
+  RefreshFurniture: true
+  ReplaceFurniture: true
+# The option to turn on debug information for more logging in the console/developer information in the console.
+Debug: false
