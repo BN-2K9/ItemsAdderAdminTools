@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.bn_2k9'
-version = '0.51'
+version = '0.52'
 
 repositories {
     mavenCentral()
@@ -24,7 +24,8 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-    compileOnly('org.projectlombok:lombok:1.18.34')
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
     compileOnly('dev.lone:api-itemsadder:4.0.10')
     compileOnly('com.sk89q.worldedit:worldedit-core:7.3.9') {
         exclude group: 'com.google.guava', module: 'guava'
