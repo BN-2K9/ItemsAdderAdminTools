@@ -1,5 +1,6 @@
-package com.bn_2k9.itemsAdderAdminTools.commands;
+package com.bn_2k9.itemsAdderAdminTools.commands.Furniture;
 
+import com.bn_2k9.itemsAdderAdminTools.framework.Color;
 import com.bn_2k9.itemsAdderAdminTools.framework.Logger;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
@@ -28,14 +29,14 @@ public class RefreshFurniture implements BasicCommand {
         // Check if the player has a selection.
         try {
             if (WorldEdit.getInstance().getSessionManager().get(actor).getSelection() == null) {
-                player.sendMessage("You don't have a active worldedit selection.");
+                player.sendMessage(Color.colorPrefix("<red>You don't have a active worldedit selection."));
                 return;
             }
         } catch (IncompleteRegionException e) {
             throw new RuntimeException(e);
         }
 
-        player.sendMessage(MiniMessage.miniMessage().deserialize("<white>ItemsAdderAdminTools <grey>>> <gold>Operation started..... "));
+        player.sendMessage(Color.colorPrefix("<gold>Operation started..... "));
 
         Region selection = null;
         try {
@@ -56,7 +57,7 @@ public class RefreshFurniture implements BasicCommand {
             }
         });
 
-        player.sendMessage(MiniMessage.miniMessage().deserialize("<white>ItemsAdderAdminTools <grey>>> <green>Operation done! Blocks changed: " + BlocksChanged[0]));
+        player.sendMessage(Color.colorPrefix("<green>Operation done! Blocks changed: " + BlocksChanged[0]));
     }
 
     @Override
