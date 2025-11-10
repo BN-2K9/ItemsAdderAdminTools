@@ -1,6 +1,7 @@
 name: ItemsAdderAdminTools
-version: '0.5.2'
+version: '0.5.3'
 main: com.bn_2k9.itemsAdderAdminTools.ItemsAdderAdminTools
 api-version: '1.21'
 authors: [ BN_2K9 ]
 description: Plugin for editing your ItemsAdder Furniture!
+depend: [ ItemsAdder ]

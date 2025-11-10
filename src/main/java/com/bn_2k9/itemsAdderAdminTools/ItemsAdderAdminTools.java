@@ -3,6 +3,7 @@ package com.bn_2k9.itemsAdderAdminTools;
 import com.bn_2k9.itemsAdderAdminTools.commands.ExtraInfo.ExtraInfoCommand;
 import com.bn_2k9.itemsAdderAdminTools.commands.Furniture.RefreshFurniture;
 import com.bn_2k9.itemsAdderAdminTools.commands.Furniture.ReplaceFurniture;
+import com.bn_2k9.itemsAdderAdminTools.commands.RemoveResourcePack.RemoveResourcePackCommand;
 import com.bn_2k9.itemsAdderAdminTools.framework.ItemsAdder.ItemsAdderCache;
 import com.bn_2k9.itemsAdderAdminTools.framework.Logger;
 import lombok.Getter;
@@ -60,6 +61,9 @@ public final class ItemsAdderAdminTools extends JavaPlugin {
         // Registering the info command.
         if (getConfig().getBoolean("EnabledCommands.ExtraInfoCommand")) {
             registerCommand("iaextrainfo", "get more info!", List.of(""), new ExtraInfoCommand());
+        }
+        if (getConfig().getBoolean("EnabledCommands.RemoveResourcePackCommand")) {
+            registerCommand("removeresourcepack", "remove all resourcepacks.", List.of(""), new RemoveResourcePackCommand());
         }
     }
 
