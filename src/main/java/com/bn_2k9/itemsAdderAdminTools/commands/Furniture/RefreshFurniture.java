@@ -9,7 +9,6 @@ import com.sk89q.worldedit.regions.Region;
 import dev.lone.itemsadder.api.CustomFurniture;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
