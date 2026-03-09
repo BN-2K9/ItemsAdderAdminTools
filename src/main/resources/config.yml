@@ -2,9 +2,15 @@
 Prefix: "<white>ItemsAdderAdminTools <grey>>> "
 # Enable and disable the commands individually.
 EnabledCommands:
+  # Make ItemsAdder refresh the furniture in the selected region.
   RefreshFurniture: true
+  # Replace a type of furniture with another type.
   ReplaceFurniture: true
+  # Get extra info on an item you are holding (Or have entered the id of.).
   ExtraInfoCommand: true
+  # A simple command to remove your resource packs.
   RemoveResourcePackCommand: true
+  # Scan your selection on items in chest, hoppers and barrels etc.
+  ScanSelectionCommand: true
 # The option to turn on debug information for more logging in the console/developer information in the console.
 Debug: false

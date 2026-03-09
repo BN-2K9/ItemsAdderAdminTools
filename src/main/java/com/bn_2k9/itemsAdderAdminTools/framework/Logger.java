@@ -19,39 +19,18 @@ public class Logger {
 
     // Method for getting colored log messages.
     public static void log(LogType type, String message) {
+        ANSIComponentSerializer ansi = ANSIComponentSerializer.builder()
+                .flattener(ComponentFlattener.basic())
+                .colorLevel(ColorLevel.TRUE_COLOR)
+                .build();
+
         switch(type) {
-            case INFO -> {
-                String ansi = ANSIComponentSerializer.builder()
-                        .flattener(ComponentFlattener.basic())
-                        .colorLevel(ColorLevel.TRUE_COLOR)
-                        .build()
-                        .serialize(MiniMessage.miniMessage().deserialize("<green>INFO <dark_grey>>> <white>" + message));
-                Bukkit.getServer().getConsoleSender().sendMessage(ansi);
-            }
-            case WARN -> {
-                String ansi = ANSIComponentSerializer.builder()
-                        .flattener(ComponentFlattener.basic())
-                        .colorLevel(ColorLevel.TRUE_COLOR)
-                        .build()
-                        .serialize(MiniMessage.miniMessage().deserialize("<gold>WARN <dark_grey>>> <white>" + message));
-                Bukkit.getServer().getConsoleSender().sendMessage(ansi);
-            }
-            case ERROR -> {
-                String ansi = ANSIComponentSerializer.builder()
-                        .flattener(ComponentFlattener.basic())
-                        .colorLevel(ColorLevel.TRUE_COLOR)
-                        .build()
-                        .serialize(MiniMessage.miniMessage().deserialize("<red>ERROR <dark_grey>>> <white>" + message));
-                Bukkit.getServer().getConsoleSender().sendMessage(ansi);
-            }
+            case INFO -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize("<green>INFO <dark_grey>>> <white>" + message)));
+            case WARN -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize("<gold>WARN <dark_grey>>> <white>" + message)));
+            case ERROR -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize("<red>ERROR <dark_grey>>> <white>" + message)));
             case DEBUG -> {
                 if (ItemsAdderAdminTools.getInstance().getConfig().getBoolean("Debug")) {
-                    String ansi = ANSIComponentSerializer.builder()
-                            .flattener(ComponentFlattener.basic())
-                            .colorLevel(ColorLevel.TRUE_COLOR)
-                            .build()
-                            .serialize(MiniMessage.miniMessage().deserialize("<yellow>DEBUG <dark_grey>>> <white>" + message));
-                    Bukkit.getServer().getConsoleSender().sendMessage(ansi);
+                    Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize("<yellow>DEBUG <dark_grey>>> <white>" + message)));
                 }
             }
         }

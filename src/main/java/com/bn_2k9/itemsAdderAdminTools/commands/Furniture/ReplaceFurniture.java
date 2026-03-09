@@ -84,7 +84,7 @@ public class ReplaceFurniture implements BasicCommand {
 
     @Override
     public boolean canUse(CommandSender sender) {
-        return sender instanceof Player;
+        return sender instanceof Player && sender.hasPermission(permission());
     }
 
     @Override
