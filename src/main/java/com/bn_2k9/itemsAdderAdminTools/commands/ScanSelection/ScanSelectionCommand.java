@@ -1,6 +1,5 @@
 package com.bn_2k9.itemsAdderAdminTools.commands.ScanSelection;
 
-import com.bn_2k9.itemsAdderAdminTools.ItemsAdderAdminTools;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -9,7 +8,6 @@ import com.sk89q.worldedit.regions.Region;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
@@ -27,45 +25,51 @@ public class ScanSelectionCommand implements BasicCommand {
     public void execute(CommandSourceStack commandSourceStack, String[] args) {
         Player player = (Player) commandSourceStack.getSender();
 
-        Bukkit.getScheduler().runTaskAsynchronously(ItemsAdderAdminTools.getInstance(), () -> {
+        Actor actor = BukkitAdapter.adapt(commandSourceStack.getSender());
 
-            Actor actor = BukkitAdapter.adapt(commandSourceStack.getSender());
+        // Get the selection of the player.
+        Region selection = null;
+        try {
+            selection = WorldEdit.getInstance().getSessionManager().get(actor).getSelection();
+        } catch (IncompleteRegionException e) {
+            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>A region should have 2 points. Not one ;)"));
+        }
 
-            // Get the selection of the player.
-            Region selection = null;
-            try {
-                selection = WorldEdit.getInstance().getSessionManager().get(actor).getSelection();
-            } catch (IncompleteRegionException e) {
-                throw new RuntimeException(e);
-            }
+        // Make sure a player has a selection.
+        if (selection == null) {
+            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Make a selection first."));
+        }
 
-            // Make sure a player has a selection.
-            if (selection == null) {
-                player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Make a selection first."));
-            }
+        final World bukkitWorld = BukkitAdapter.adapt(selection.getWorld());
 
-            final World bukkitWorld = BukkitAdapter.adapt(selection.getWorld());
+        final boolean[] itemFound = {false};
 
-            // Iterating through the blocks in a region.
-            selection.iterator().forEachRemaining(blockVector3 -> {
+        // Iterating through the blocks in a region.
+        selection.iterator().forEachRemaining(blockVector3 -> {
 
-                BlockState state = bukkitWorld.getBlockAt(BukkitAdapter.adapt(bukkitWorld, blockVector3)).getState();
+            BlockState state = bukkitWorld.getBlockAt(BukkitAdapter.adapt(bukkitWorld, blockVector3)).getState();
 
-                if (state instanceof InventoryHolder) {
+            if (state instanceof InventoryHolder) {
 
-                    InventoryHolder inventoryHolder = (InventoryHolder) state;
+                InventoryHolder inventoryHolder = (InventoryHolder) state;
 
-                    for (ItemStack itemStack : inventoryHolder.getInventory().getContents()) {
-                        if (itemStack != null && itemStack.getType() != Material.AIR) {
-                            player.sendMessage(MiniMessage.miniMessage().deserialize("<green>Found item: " + itemStack.getType().toString() + " at: x:" + state.getLocation().getBlockX() + " y: " + state.getLocation().getBlockY() + " z: " + state.getLocation().getBlockZ()));
-                        }
+                for (ItemStack itemStack : inventoryHolder.getInventory().getContents()) {
+                    if (itemStack != null && itemStack.getType() != Material.AIR) {
+                        String minimessage = "<green>Found item(s) at: <click:run_command:'/minecraft:teleport @s " + state.getLocation().getBlockX() + " " + state.getLocation().getBlockY() + " " + state.getLocation().getBlockZ() + "'>" + "<underlined>x:" + state.getLocation().getBlockX() + " y: " + state.getLocation().getBlockY() + " z: " + state.getLocation().getBlockZ() + "</underlined></click>";
+                        player.sendMessage(MiniMessage.miniMessage().deserialize(minimessage));
+                        itemFound[0] = true;
+                        break;
                     }
-
                 }
 
-            });
+            }
 
         });
+
+        if (!itemFound[0]) {
+            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>No items found."));
+        }
+
     }
 
     @Override
