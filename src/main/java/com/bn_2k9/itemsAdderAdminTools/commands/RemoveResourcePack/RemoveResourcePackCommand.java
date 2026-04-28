@@ -6,9 +6,11 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class RemoveResourcePackCommand implements BasicCommand {
 
@@ -27,13 +29,18 @@ public class RemoveResourcePackCommand implements BasicCommand {
             }
         }
 
+        if (target == null){
+            player.sendMessage(Color.colorPrefix("<red>Can't find a vailid target."));
+            return;
+        }
+
         player.sendMessage(Color.colorPrefix("<white>Removed resource pack for: " + target.getName()));
         target.clearResourcePacks();
 
     }
 
     @Override
-    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
+    public @NonNull Collection<String> suggest(@NonNull CommandSourceStack commandSourceStack, String[] args) {
         if (args.length == 0) {
             return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
         }
@@ -41,8 +48,8 @@ public class RemoveResourcePackCommand implements BasicCommand {
     }
 
     @Override
-    public boolean canUse(CommandSender sender) {
-        return sender instanceof Player && sender.hasPermission(permission());
+    public boolean canUse(@NonNull CommandSender sender) {
+        return sender instanceof Player && sender.hasPermission(Objects.requireNonNull(permission()));
     }
 
     @Override

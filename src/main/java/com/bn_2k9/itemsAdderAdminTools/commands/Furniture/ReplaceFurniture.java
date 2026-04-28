@@ -13,9 +13,11 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class ReplaceFurniture implements BasicCommand {
 
@@ -47,7 +49,7 @@ public class ReplaceFurniture implements BasicCommand {
 
             player.sendMessage(Color.colorPrefix("<gold>Operation started..... "));
 
-            Region selection = null;
+            Region selection;
             try {
                 selection = WorldEdit.getInstance().getSessionManager().get(actor).getSelection();
             } catch (IncompleteRegionException e) {
@@ -75,7 +77,7 @@ public class ReplaceFurniture implements BasicCommand {
     }
 
     @Override
-    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
+    public @NonNull Collection<String> suggest(@NonNull CommandSourceStack commandSourceStack, String[] args) {
         if (args.length < 2) {
             return ItemsAdderCache.getInstance().getNameSpacedFurniture();
         }
@@ -83,8 +85,8 @@ public class ReplaceFurniture implements BasicCommand {
     }
 
     @Override
-    public boolean canUse(CommandSender sender) {
-        return sender instanceof Player && sender.hasPermission(permission());
+    public boolean canUse(@NonNull CommandSender sender) {
+        return sender instanceof Player && sender.hasPermission(Objects.requireNonNull(permission()));
     }
 
     @Override

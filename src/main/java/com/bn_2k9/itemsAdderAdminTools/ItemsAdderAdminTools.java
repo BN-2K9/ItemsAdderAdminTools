@@ -30,6 +30,7 @@ public final class ItemsAdderAdminTools extends JavaPlugin {
         if (!isItemsAdderInstalled()) {
             Logger.log(Logger.LogType.ERROR, "ItemsAdder isn't installed. Please install ItemsAdder!");
             Bukkit.getPluginManager().disablePlugin(this);
+            return;
         }
 
         if (!isWorldEditInstalled()) {

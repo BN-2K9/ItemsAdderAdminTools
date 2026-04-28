@@ -12,14 +12,16 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class RefreshFurniture implements BasicCommand {
 
     @Override
-    public void execute(CommandSourceStack commandSourceStack, String[] args) {
+    public void execute(CommandSourceStack commandSourceStack, String @NonNull [] args) {
 
         // Get the worldedit equivalent of a player.
         Player player = (Player) commandSourceStack.getSender();
@@ -37,7 +39,7 @@ public class RefreshFurniture implements BasicCommand {
 
         player.sendMessage(Color.colorPrefix("<gold>Operation started..... "));
 
-        Region selection = null;
+        Region selection;
         try {
             selection = WorldEdit.getInstance().getSessionManager().get(actor).getSelection();
         } catch (IncompleteRegionException e) {
@@ -60,13 +62,13 @@ public class RefreshFurniture implements BasicCommand {
     }
 
     @Override
-    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
+    public @NonNull Collection<String> suggest(@NonNull CommandSourceStack commandSourceStack, String @NonNull [] args) {
         return BasicCommand.super.suggest(commandSourceStack, args);
     }
 
     @Override
-    public boolean canUse(CommandSender sender) {
-        return sender instanceof Player && sender.hasPermission(permission());
+    public boolean canUse(@NonNull CommandSender sender) {
+        return sender instanceof Player && sender.hasPermission(Objects.requireNonNull(permission()));
     }
 
     @Override
