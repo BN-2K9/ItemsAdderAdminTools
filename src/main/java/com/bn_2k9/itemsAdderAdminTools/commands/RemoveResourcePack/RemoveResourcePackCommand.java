@@ -15,8 +15,11 @@ import java.util.Objects;
 public class RemoveResourcePackCommand implements BasicCommand {
 
     @Override
-    public void execute(CommandSourceStack commandSourceStack, String[] args) {
-        Player player = (Player) commandSourceStack.getSender();
+    public void execute(CommandSourceStack commandSourceStack, String @NonNull [] args) {
+
+        if (!(commandSourceStack.getSender() instanceof Player player)) {
+            return;
+        }
 
         Player target = null;
 

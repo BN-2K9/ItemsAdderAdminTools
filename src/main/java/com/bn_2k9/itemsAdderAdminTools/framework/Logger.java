@@ -25,12 +25,12 @@ public class Logger {
                 .build();
 
         switch(type) {
-            case INFO -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize("<green>INFO <dark_grey>>> <white>" + message)));
-            case WARN -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize("<gold>WARN <dark_grey>>> <white>" + message)));
-            case ERROR -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize("<red>ERROR <dark_grey>>> <white>" + message)));
+            case INFO -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize(ItemsAdderAdminTools.getInstance().getConfig().getString("Prefix", "ItemsAdderAdminTools") + "<green>INFO <dark_grey>>> <white>" + message)));
+            case WARN -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize(ItemsAdderAdminTools.getInstance().getConfig().getString("Prefix", "ItemsAdderAdminTools") + "<gold>WARN <dark_grey>>> <white>" + message)));
+            case ERROR -> Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize(ItemsAdderAdminTools.getInstance().getConfig().getString("Prefix", "ItemsAdderAdminTools") + "<red>ERROR <dark_grey>>> <white>" + message)));
             case DEBUG -> {
                 if (ItemsAdderAdminTools.getInstance().getConfig().getBoolean("Debug")) {
-                    Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize("<yellow>DEBUG <dark_grey>>> <white>" + message)));
+                    Bukkit.getServer().getConsoleSender().sendMessage(ansi.serialize(MiniMessage.miniMessage().deserialize(ItemsAdderAdminTools.getInstance().getConfig().getString("Prefix", "ItemsAdderAdminTools") + "<yellow>DEBUG <dark_grey>>> <white>" + message)));
                 }
             }
         }

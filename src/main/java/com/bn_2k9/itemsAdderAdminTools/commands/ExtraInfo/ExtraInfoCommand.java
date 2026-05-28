@@ -9,19 +9,15 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 public class ExtraInfoCommand implements BasicCommand {
 
     @Override
     public void execute(CommandSourceStack commandSourceStack, String[] args) {
-        // The custom ItemStack.
-        CustomStack customStack = null;
         Player player = (Player) commandSourceStack.getSender();
 
         if (args.length < 1) {
@@ -29,6 +25,8 @@ public class ExtraInfoCommand implements BasicCommand {
             return;
         }
 
+        // The custom ItemStack.
+        CustomStack customStack = null;
         if (args.length == 1) {
             // Check if there is a item in the players main hand.
             if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
@@ -51,16 +49,23 @@ public class ExtraInfoCommand implements BasicCommand {
 
         // Return the desired value.
         switch (args[0].toLowerCase()) {
-            case "item_model" -> player.sendMessage(Color.colorPrefix("<green>The Item_Model value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getModelPath()));
-            case "durability" -> player.sendMessage(Color.colorPrefix("<green>The Durability value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getDurability() + " <green>/ <gold>" + customStack.getMaxDurability()));
-            case "custommodeldata" -> player.sendMessage(Color.colorPrefix("<green>The CustomModelData value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getItemStack().getData(DataComponentTypes.CUSTOM_MODEL_DATA)));
-            case "material" -> player.sendMessage(Color.colorPrefix("<green>The Material value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getItemStack().getType().toString()));
-            default -> player.sendMessage(Color.colorPrefix("<red>Not a valid argument."));
+            case "item_model" -> {
+                player.sendMessage(Color.colorPrefix("<green>The Item_Model value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getModelPath()));
+            }
+            case "durability" -> {
+                player.sendMessage(Color.colorPrefix("<green>The Durability value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getDurability() + " <green>/ <gold>" + customStack.getMaxDurability()));
+            }
+            case "custommodeldata" -> {
+                player.sendMessage(Color.colorPrefix("<green>The CustomModelData value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getItemStack().getData(DataComponentTypes.CUSTOM_MODEL_DATA)));
+            }
+            case "material" -> {
+                player.sendMessage(Color.colorPrefix("<green>The Material value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getItemStack().getType().toString()));
+            }
         }
     }
 
     @Override
-    public @NonNull Collection<String> suggest(@NonNull CommandSourceStack commandSourceStack, String[] args) {
+    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
         if (args.length == 0) {
             return List.of("Item_Model", "Durability", "CustomModelData", "Material");
         }
@@ -68,11 +73,6 @@ public class ExtraInfoCommand implements BasicCommand {
             return ItemsAdderCache.getInstance().getNameSpacedItems();
         }
         return BasicCommand.super.suggest(commandSourceStack, args);
-    }
-
-    @Override
-    public boolean canUse(@NonNull CommandSender sender) {
-        return sender instanceof Player && sender.hasPermission(Objects.requireNonNull(permission()));
     }
 
     @Override

@@ -11,7 +11,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -19,13 +18,15 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Objects;
 
 public class ScanSelectionCommand implements BasicCommand {
 
     @Override
     public void execute(CommandSourceStack commandSourceStack, String @NonNull [] args) {
-        Player player = (Player) commandSourceStack.getSender();
+
+        if (!(commandSourceStack.getSender() instanceof Player player)) {
+            return;
+        }
 
         Actor actor = BukkitAdapter.adapt(commandSourceStack.getSender());
 
@@ -38,9 +39,8 @@ public class ScanSelectionCommand implements BasicCommand {
         }
 
         // Make sure a player has a selection.
-        if (selection == null || selection.getWorld() != null) {
+        if (selection == null) {
             player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Make a selection first."));
-            return;
         }
 
         final World bukkitWorld = BukkitAdapter.adapt(selection.getWorld());
@@ -52,7 +52,9 @@ public class ScanSelectionCommand implements BasicCommand {
 
             BlockState state = bukkitWorld.getBlockAt(BukkitAdapter.adapt(bukkitWorld, blockVector3)).getState();
 
-            if (state instanceof InventoryHolder inventoryHolder) {
+            if (state instanceof InventoryHolder) {
+
+                InventoryHolder inventoryHolder = (InventoryHolder) state;
 
                 for (ItemStack itemStack : inventoryHolder.getInventory().getContents()) {
                     if (itemStack != null && itemStack.getType() != Material.AIR) {
@@ -74,13 +76,8 @@ public class ScanSelectionCommand implements BasicCommand {
     }
 
     @Override
-    public @NonNull Collection<String> suggest(@NonNull CommandSourceStack commandSourceStack, String @NonNull [] args) {
+    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
         return BasicCommand.super.suggest(commandSourceStack, args);
-    }
-
-    @Override
-    public boolean canUse(@NonNull CommandSender sender) {
-        return sender instanceof Player && sender.hasPermission(Objects.requireNonNull(permission()));
     }
 
     @Override
