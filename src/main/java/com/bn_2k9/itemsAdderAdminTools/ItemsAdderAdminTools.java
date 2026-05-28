@@ -26,6 +26,12 @@ public final class ItemsAdderAdminTools extends JavaPlugin {
         instance = this;
         // Saving the config.
         saveDefaultConfig();
+    }
+
+    @Override
+    public void onEnable() {
+        // Registering the itemsAdderCache.
+        itemsAdderCache = new ItemsAdderCache();
         // Checking if itemsAdder is installed.
         if (!isItemsAdderInstalled()) {
             Logger.log(Logger.LogType.ERROR, "ItemsAdder isn't installed. Please install ItemsAdder!");
@@ -37,12 +43,6 @@ public final class ItemsAdderAdminTools extends JavaPlugin {
             Logger.log(Logger.LogType.ERROR, "WorldEdit or Fawe, isn't installed. Please install WorldEdit or Fawe.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
-    }
-
-    @Override
-    public void onEnable() {
-        // Registering the itemsAdderCache.
-        itemsAdderCache = new ItemsAdderCache();
         // Registering all commands.
         registerCommands();
         // Registering all Listeners.
@@ -88,5 +88,5 @@ public final class ItemsAdderAdminTools extends JavaPlugin {
         return Bukkit.getPluginManager().isPluginEnabled("ItemsAdder");
     }
     // Check if world edit is enabled.
-    private boolean isWorldEditInstalled() {return Bukkit.getPluginManager().isPluginEnabled("WorldEdit") || Bukkit.getPluginManager().isPluginEnabled("FAWE");}
+    private boolean isWorldEditInstalled() {return Bukkit.getPluginManager().isPluginEnabled("WorldEdit") || Bukkit.getPluginManager().isPluginEnabled("FastAsyncWorldEdit");}
 }
