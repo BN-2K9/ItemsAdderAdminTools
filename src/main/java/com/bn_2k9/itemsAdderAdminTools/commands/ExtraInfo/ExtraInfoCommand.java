@@ -7,13 +7,14 @@ import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ExtraInfoCommand implements BasicCommand {
 
     @Override
@@ -26,7 +27,7 @@ public class ExtraInfoCommand implements BasicCommand {
         }
 
         // The custom ItemStack.
-        CustomStack customStack = null;
+        CustomStack customStack;
         if (args.length == 1) {
             // Check if there is a item in the players main hand.
             if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
@@ -34,38 +35,26 @@ public class ExtraInfoCommand implements BasicCommand {
                 return;
             }
             customStack = CustomStack.byItemStack(player.getInventory().getItemInMainHand());
+        } else if (ItemsAdderCache.getInstance().getNameSpacedItems().contains(args[1])) {
+            // Set the custom item.
+            customStack = CustomStack.getInstance(args[1]);
         } else {
-            // Check if the second argument is an existing namespaced item in itemsadder.
-            if (ItemsAdderCache.getInstance().getNameSpacedItems().contains(args[1])) {
-                customStack = CustomStack.getInstance(args[1]);
-            }
-        }
-
-        // Check if the items is a ItemsAdder item.
-        if (customStack == null) {
+            // If the item is not an itemsadder item.
             player.sendMessage(Color.colorPrefix("<red>The item in your hand isn't a ItemsAdder item!"));
             return;
         }
 
         // Return the desired value.
         switch (args[0].toLowerCase()) {
-            case "item_model" -> {
-                player.sendMessage(Color.colorPrefix("<green>The Item_Model value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getModelPath()));
-            }
-            case "durability" -> {
-                player.sendMessage(Color.colorPrefix("<green>The Durability value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getDurability() + " <green>/ <gold>" + customStack.getMaxDurability()));
-            }
-            case "custommodeldata" -> {
-                player.sendMessage(Color.colorPrefix("<green>The CustomModelData value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getItemStack().getData(DataComponentTypes.CUSTOM_MODEL_DATA)));
-            }
-            case "material" -> {
-                player.sendMessage(Color.colorPrefix("<green>The Material value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getItemStack().getType().toString()));
-            }
+            case "item_model" -> player.sendMessage(Color.colorPrefix("<green>The Item_Model value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getModelPath()));
+            case "durability" -> player.sendMessage(Color.colorPrefix("<green>The Durability value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getDurability() + " <green>/ <gold>" + customStack.getMaxDurability()));
+            case "custommodeldata" -> player.sendMessage(Color.colorPrefix("<green>The CustomModelData value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getItemStack().getData(DataComponentTypes.CUSTOM_MODEL_DATA)));
+            case "material" -> player.sendMessage(Color.colorPrefix("<green>The Material value of: <gold>" + customStack.getId() + " <green>is: <gold>" + customStack.getItemStack().getType().toString()));
         }
     }
 
     @Override
-    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
+    public @NonNull Collection<String> suggest(@NonNull CommandSourceStack commandSourceStack, String[] args) {
         if (args.length == 0) {
             return List.of("Item_Model", "Durability", "CustomModelData", "Material");
         }

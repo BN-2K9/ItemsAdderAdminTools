@@ -31,19 +31,22 @@ public class ScanSelectionCommand implements BasicCommand {
         Actor actor = BukkitAdapter.adapt(commandSourceStack.getSender());
 
         // Get the selection of the player.
-        Region selection = null;
+        Region selection;
         try {
             selection = WorldEdit.getInstance().getSessionManager().get(actor).getSelection();
         } catch (IncompleteRegionException e) {
             player.sendMessage(MiniMessage.miniMessage().deserialize("<red>A region should have 2 points. Not one ;)"));
+            return;
         }
 
         // Make sure a player has a selection.
-        if (selection == null) {
+        com.sk89q.worldedit.world.World selectionWorld = selection.getWorld();
+        if (selectionWorld == null) {
             player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Make a selection first."));
+            return;
         }
 
-        final World bukkitWorld = BukkitAdapter.adapt(selection.getWorld());
+        final World bukkitWorld = BukkitAdapter.adapt(selectionWorld);
 
         final boolean[] itemFound = {false};
 
@@ -52,9 +55,7 @@ public class ScanSelectionCommand implements BasicCommand {
 
             BlockState state = bukkitWorld.getBlockAt(BukkitAdapter.adapt(bukkitWorld, blockVector3)).getState();
 
-            if (state instanceof InventoryHolder) {
-
-                InventoryHolder inventoryHolder = (InventoryHolder) state;
+            if (state instanceof InventoryHolder inventoryHolder) {
 
                 for (ItemStack itemStack : inventoryHolder.getInventory().getContents()) {
                     if (itemStack != null && itemStack.getType() != Material.AIR) {
@@ -76,7 +77,7 @@ public class ScanSelectionCommand implements BasicCommand {
     }
 
     @Override
-    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
+    public @NonNull Collection<String> suggest(@NonNull CommandSourceStack commandSourceStack, String @NonNull [] args) {
         return BasicCommand.super.suggest(commandSourceStack, args);
     }
 

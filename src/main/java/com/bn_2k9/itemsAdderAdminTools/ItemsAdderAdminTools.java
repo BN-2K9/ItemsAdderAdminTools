@@ -54,6 +54,7 @@ public final class ItemsAdderAdminTools extends JavaPlugin {
     @Override
     public void onDisable() {
         // Bye ;)
+        Logger.log(Logger.LogType.INFO, "ItemsAdderTools Shutting down!");
         Logger.log(Logger.LogType.INFO, "Bye!");
     }
 
